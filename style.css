@@ -10,7 +10,7 @@ canvas {
 
 main {
   --dark-bg: rgba(56, 56, 56, 0.486);
-  --spacing: 350px;
+  --spacing: 250px;
 
   position: absolute;
 

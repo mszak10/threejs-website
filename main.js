@@ -24,7 +24,8 @@ const geometry = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
 const material = new THREE.MeshStandardMaterial({ color: 0x005ECF });
 const torus = new THREE.Mesh(geometry, material);
 scene.add(torus);
-torus.position.x = 18;
+torus.position.x = 22;
+torus.position.z = -10;
 
 // Lightning
 const pointLight = new THREE.PointLight(0xffffff);
@@ -73,14 +74,29 @@ const earth = new THREE.Mesh(
 scene.add(earth);
 
 earth.position.z = 45;
-earth.position.x = 8;
-//earth.position.z = 0
+earth.position.x = 25;
+
+// Mars
+const marsTexture = new THREE.TextureLoader().load( 'mars_1k_color.jpg' );
+const marsNormal = new THREE.TextureLoader().load( 'mars_1k_normal.jpg' );
+
+const mars = new THREE.Mesh(
+  new THREE.SphereGeometry(3.5, 32, 32),
+  new THREE.MeshStandardMaterial( {
+    map: marsTexture,
+    normalMap: marsNormal
+  } )
+);
+
+scene.add(mars);
+
+mars.position.z = 70;
+mars.position.x = 25;
 
 function moveCamera(){
   const t = document.body.getBoundingClientRect().top;
   earth.rotation.y = t * 0.005
-  //earth.rotation.y = t * 0.075
-  //earth.rotation.z = t * 0.05
+  mars.rotation.y = t * 0.003
 
   camera.position.x = (t - 3) * -0.0002;
   camera.position.y = t * -0.0002;
