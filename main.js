@@ -1,6 +1,6 @@
 import './style.css';
 import * as THREE from 'three';
-//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';  
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';  
 
 
 // Setup
@@ -19,29 +19,37 @@ camera.position.setX(-3);
 
 renderer.render(scene, camera);
 
-// Setting up TorusKnot
-const geometry = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
-const material = new THREE.MeshStandardMaterial({ color: 0x005ECF });
-const torus = new THREE.Mesh(geometry, material);
-scene.add(torus);
-torus.position.x = 22;
-torus.position.z = -10;
+// Setting up a Plane
+const geometry = new THREE.PlaneGeometry( 10, 10, 10, 10 );
+const material = new THREE.MeshPhongMaterial({ 
+  color: 0xCF1400,
+side: THREE.DoubleSide,
+flatShading: THREE.FlatShading });
+const plane = new THREE.Mesh(geometry, material);
+
+const { array } = plane.geometry.attributes.position
+for (let i=0; i < array.length; i += 3){
+  const x = array[i]
+  const y = array[i + 1]
+  const z = array[i + 2]
+  
+  array[i + 2] = z + Math.random()
+}
+
+scene.add(plane);
 
 // Lightning
-const pointLight = new THREE.PointLight(0xffffff);
-//pointLight.position.set(5, 5, 5);
-pointLight.position.set(20, 50, 500);
-
-//const ambientLight = new THREE.AmbientLight(0xffffff);
-scene.add(pointLight/*, ambientLight*/);
+const directionalLight = new THREE.DirectionalLight(0xffffff);
+directionalLight.position.set(0, 0, 1);
+scene.add(directionalLight);
 
 // Helpers
-const lightHelper = new THREE.PointLightHelper(pointLight)
+const lightHelper = new THREE.PointLightHelper(directionalLight)
 const gridHelper = new THREE.GridHelper(200, 50);
-//scene.add(lightHelper)
-//scene.add(gridHelper);
+scene.add(lightHelper)
+scene.add(gridHelper);
 
-//const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
 
 // Stars
 const star_geometry = new THREE.SphereGeometry(0.25, 24, 24);
@@ -60,43 +68,8 @@ Array(800).fill().forEach(addStar);
 const spaceBackground = new THREE.TextureLoader().load( 'space.jpg' );
 scene.background = spaceBackground;
 
-const earthTexture = new THREE.TextureLoader().load( 'earthmap.jpg' );
-const earthNormal = new THREE.TextureLoader().load( 'earthbump.jpg' );
-
-const earth = new THREE.Mesh(
-  new THREE.SphereGeometry(3, 32, 32),
-  new THREE.MeshStandardMaterial( {
-    map: earthTexture,
-    bumpMap: earthNormal
-  } )
-);
-
-scene.add(earth);
-
-earth.position.z = 45;
-earth.position.x = 25;
-
-// Mars
-const marsTexture = new THREE.TextureLoader().load( 'mars_1k_color.jpg' );
-const marsNormal = new THREE.TextureLoader().load( 'mars_1k_normal.jpg' );
-
-const mars = new THREE.Mesh(
-  new THREE.SphereGeometry(3.5, 32, 32),
-  new THREE.MeshStandardMaterial( {
-    map: marsTexture,
-    normalMap: marsNormal
-  } )
-);
-
-scene.add(mars);
-
-mars.position.z = 70;
-mars.position.x = 25;
-
 function moveCamera(){
   const t = document.body.getBoundingClientRect().top;
-  earth.rotation.y = t * 0.005
-  mars.rotation.y = t * 0.003
 
   camera.position.x = (t - 3) * -0.0002;
   camera.position.y = t * -0.0002;
@@ -108,11 +81,7 @@ document.body.onscroll = moveCamera;
 function animate() {
   requestAnimationFrame( animate );
 
-  //controls.update();
-
-  torus.rotation.x += 0.01;
-  torus.rotation.y += 0.005;
-  torus.rotation.z += 0.01;
+  controls.update();
 
   renderer.render( scene, camera );
 }
