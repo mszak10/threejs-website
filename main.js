@@ -1,6 +1,7 @@
 import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';  
+//import * as dat from 'dat.gui'
 
 
 // Setup
@@ -14,13 +15,13 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.setZ(30);
+camera.position.setZ(50);
 camera.position.setX(-3);
 
 renderer.render(scene, camera);
 
 // Setting up a Plane
-const geometry = new THREE.PlaneGeometry( 10, 10, 10, 10 );
+const geometry = new THREE.PlaneGeometry( 400, 400, 50, 50 );
 const material = new THREE.MeshPhongMaterial({ 
   color: 0xCF1400,
 side: THREE.DoubleSide,
@@ -50,20 +51,6 @@ scene.add(lightHelper)
 scene.add(gridHelper);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-
-// Stars
-const star_geometry = new THREE.SphereGeometry(0.25, 24, 24);
-const star_material = new THREE.MeshStandardMaterial( {color: 0xffffff} );
-
-function addStar() {
-  const star = new THREE.Mesh( star_geometry, star_material );
-  const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread( 250 ));
-
-  star.position.set(x, y, z);
-  scene.add(star)
-}
-
-Array(800).fill().forEach(addStar);
 
 const spaceBackground = new THREE.TextureLoader().load( 'space.jpg' );
 scene.background = spaceBackground;
