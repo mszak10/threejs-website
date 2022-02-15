@@ -8,8 +8,8 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^2.8.1",
-    "dat.gui": "^0.7.7"
+    "dat.gui": "^0.7.7",
+    "vite": "^2.8.2"
   },
   "dependencies": {
     "three": "^0.137.5"
