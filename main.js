@@ -87,17 +87,32 @@ const mouse = {
 function animate() {
   requestAnimationFrame( animate );
 
-  controls.update();
+  //controls.update();
 
   renderer.render( scene, camera );
 
   raycaster.setFromCamera(mouse, camera);
   const intersect = raycaster.intersectObject(plane);
 
-  if (intersect.length > 0){
-    intersect[0].object.geometry.attributes.color.setX[intersect[0].face.a, 0]
+  if (intersect.length > 0) {
+    const { color } = intersect[0].object.geometry.attributes
 
-    //intersect[0].object.geometry.attributes.color. = true; doesn't work yet
+    // vertice 1
+    color.setX(intersect[0].face.a, 0.1)
+    color.setY(intersect[0].face.a, 0.5)
+    color.setZ(intersect[0].face.a, 1)
+
+    // vertice 2
+    color.setX(intersect[0].face.b, 0.1)
+    color.setY(intersect[0].face.b, 0.5)
+    color.setZ(intersect[0].face.b, 1)
+
+    // vertice 3
+    color.setX(intersect[0].face.c, 0.1)
+    color.setY(intersect[0].face.c, 0.5)
+    color.setZ(intersect[0].face.c, 1)
+
+    intersect[0].object.geometry.attributes.color.needsUpdate = true
   }
 }
 
